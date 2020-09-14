@@ -8,6 +8,7 @@ RUN set -eux \
   ; DEBIAN_FRONTEND=noninteractive \
         apt-get install -y --no-install-recommends \
         iptables \
+  ; update-alternatives --set iptables /usr/sbin/iptables-legacy \
   ; curl -s https://packagecloud.io/install/repositories/datawireio/telepresence/script.deb.sh | bash \
   ; apt install -y --no-install-recommends telepresence \
   ; apt-get autoremove -y && apt-get clean -y \
