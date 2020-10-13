@@ -1,9 +1,23 @@
 build version="7.2":
     docker build . -t nnurphy/phpf:{{version}} \
-        --build-arg php_version={{version}} \
-        --build-arg s6url=http://172.178.1.204:2015/s6-overlay-amd64.tar.gz \
-        --build-arg wstunnel_url=http://172.178.1.204:2015/tools/wstunnel_linux_x64
+        -f Dockerfile-{{version}} \
+        --build-arg php_version={{version}}
 
+t profile="1":
+    docker run --rm \
+        --name=test \
+        -p 8090:80 \
+        -e WEB_ROOT=/app \
+        -e PHP_DEBUG={{profile}} \
+        -e WS_FIXED=1 \
+        -e PHP_FPM_SERVERS=5,25 \
+        -e CONF_PHP_SESSION__AUTO_START=119 \
+        -v vscode-server-php:/root/.vscode-server \
+        -v $(pwd)/id_ed25519.pub:/etc/authorized_keys/root \
+        -v $(pwd)/index.php:/app/index.php \
+        -v $(pwd)/log:/var/log/xdebug \
+        -v $PWD/index.php:/srv/index.php \
+        nnurphy/phpf:7.2
 
 build-gcc:
     docker build . -t nnurphy/phpf:7.2 -f Dockerfile-gcc \
