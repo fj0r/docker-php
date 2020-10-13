@@ -53,6 +53,30 @@ elif [ "$PHP_PROFILE" = "2" ]; then
     } >> /etc/php/${PHP_VERSION}/mods-available/xdebug.ini
 fi
 
+for i in "${!CONF_PHP_@}"; do
+  k=$(echo ${i:9} | sed 's!__!.!g' | tr '[:upper:]' '[:lower:]')
+  v=$(eval "echo \"\$$i\"")
+  if [ -n "$v" ]; then
+			sed -e 's!.*\('"$k"' =\).*$!\1 '"$v"'!' -i /etc/php/${PHP_VERSION}/fpm/php.ini
+	fi
+done
+
+for i in "${!CONF_FPM_@}"; do
+  k=$(echo ${i:9} | sed 's!__!.!g' | tr '[:upper:]' '[:lower:]')
+  v=$(eval "echo \"\$$i\"")
+  if [ -n "$v" ]; then
+			sed -e 's!.*\('"$k"' =\).*$!\1 '"$v"'!' -i /etc/php/${PHP_VERSION}/fpm/php-fpm.ini
+	fi
+done
+
+for i in "${!CONF_POOL_@}"; do
+  k=$(echo ${i:10} | sed 's!__!.!g' | tr '[:upper:]' '[:lower:]')
+  v=$(eval "echo \"\$$i\"")
+  if [ -n "$v" ]; then
+			sed -e 's!.*\('"$k"' =\).*$!\1 '"$v"'!' -i /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
+	fi
+done
+
 if [ ! -z $STARTUP_SCRIPT ]; then
   bash $STARTUP_SCRIPT
 fi
