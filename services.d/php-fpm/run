@@ -1,81 +1,9 @@
 #!/usr/bin/with-contenv bash
 
-if [ ! -z $UPLOAD_MAX_FILESIZE ]; then
-    echo "-- \$UPLOAD_MAX_FILESIZE been set to $UPLOAD_MAX_FILESIZE(MB)"
-    sed -i 's!\(upload_max_filesize =\).*!\1 '"$UPLOAD_MAX_FILESIZE"'M!g' /etc/php/*/fpm/php.ini
-    sed -i 's!\(post_max_size =\).*!\1 '"$(($UPLOAD_MAX_FILESIZE * 4))"'M!g' /etc/php/*/fpm/php.ini
-    sed -i '/charset.*$/a client_max_body_size '"$UPLOAD_MAX_FILESIZE"'m;' /etc/nginx/conf.d/default.conf
+if [ -f /setup-php ]; then
+  bash /setup-php
+  mv /setup-php /setup-php.$(date -Is)
 fi
-
-if [ ! -z $PHP_FPM_SERVERS ]; then
-    IFS=',' read -ra php_fpm_servers <<< "$PHP_FPM_SERVERS"
-    _PFSN=${php_fpm_servers[0]}
-    _PFSM=${php_fpm_servers[1]}
-    _PFSS=$[ $_PFSN + ( $_PFSM - $_PFSN ) / 2 ]
-    echo "-- \$PHP_FPM_SERVERS been set to $PHP_FPM_SERVERS, pm.start_servers=${_PFSS}"
-    sed -e 's!.*\(pm.start_servers =\).*$!\1 '"$_PFSS"'!' \
-        -e 's!.*\(pm.min_spare_servers =\).*$!\1 '"$_PFSN"'!' \
-        -e 's!.*\(pm.max_spare_servers =\).*$!\1 '"$_PFSM"'!' \
-        -e 's!.*\(pm.max_children =\).*$!\1 '"$_PFSM"'!' \
-        -i /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
-fi
-
-if [ ! -z $PHP_PROFILE ] || [ ! -z $PHP_DEBUG ]; then
-    mkdir -p /var/log/xdebug
-    chmod 1777 /var/log/xdebug
-fi
-
-if [ ! -z $PHP_DEBUG ]; then
-    export xdebug_idekey=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13)
-    echo "xdebug.idekey==${xdebug_idekey}"
-    { \
-      echo 'xdebug.remote_log="/var/log/xdebug/xdebug.log"' ; \
-      echo 'xdebug.remote_enable=on' ; \
-      echo 'xdebug.remote_autostart=off' ; \
-      echo 'xdebug.remote_host=127.0.0.1' ; \
-      echo 'xdebug.remote_port=9000' ; \
-      echo "xdebug.idekey=${xdebug_idekey}" ; \
-    } >> /etc/php/${PHP_VERSION}/mods-available/xdebug.ini
-fi
-
-if [ "$PHP_PROFILE" = "1" ]; then
-    { \
-      echo '; profiler'; \
-      echo 'xdebug.profiler_enable = 0' ; \
-      echo 'xdebug.profiler_enable_trigger = 1' ; \
-      echo 'xdebug.profiler_output_dir = /var/log/xdebug' ; \
-    } >> /etc/php/${PHP_VERSION}/mods-available/xdebug.ini
-elif [ "$PHP_PROFILE" = "2" ]; then
-    { \
-      echo '; profiler'; \
-      echo 'xdebug.profiler_enable = 1' ; \
-      echo 'xdebug.profiler_output_dir = /var/log/xdebug' ; \
-    } >> /etc/php/${PHP_VERSION}/mods-available/xdebug.ini
-fi
-
-for i in "${!CONF_PHP_@}"; do
-  k=$(echo ${i:9} | sed 's!__!.!g' | tr '[:upper:]' '[:lower:]')
-  v=$(eval "echo \"\$$i\"")
-  if [ -n "$v" ]; then
-			sed -e 's!.*\('"$k"' =\).*$!\1 '"$v"'!' -i /etc/php/${PHP_VERSION}/fpm/php.ini
-	fi
-done
-
-for i in "${!CONF_FPM_@}"; do
-  k=$(echo ${i:9} | sed 's!__!.!g' | tr '[:upper:]' '[:lower:]')
-  v=$(eval "echo \"\$$i\"")
-  if [ -n "$v" ]; then
-			sed -e 's!.*\('"$k"' =\).*$!\1 '"$v"'!' -i /etc/php/${PHP_VERSION}/fpm/php-fpm.ini
-	fi
-done
-
-for i in "${!CONF_POOL_@}"; do
-  k=$(echo ${i:10} | sed 's!__!.!g' | tr '[:upper:]' '[:lower:]')
-  v=$(eval "echo \"\$$i\"")
-  if [ -n "$v" ]; then
-			sed -e 's!.*\('"$k"' =\).*$!\1 '"$v"'!' -i /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
-	fi
-done
 
 if [ ! -z $STARTUP_SCRIPT ]; then
   bash $STARTUP_SCRIPT

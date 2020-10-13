@@ -47,6 +47,7 @@ RUN set -eux \
   ; mkdir -p /var/run/php
 
 COPY docker-nginx-default /etc/openresty/conf.d/default.conf
+COPY setup-php /setup-php
 COPY services.d/php-fpm /etc/services.d/php-fpm
 
 ENV PHP_DEBUG=
