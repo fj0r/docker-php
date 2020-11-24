@@ -26,15 +26,13 @@ if [ ! -z $PHP_PROFILE ] || [ ! -z $PHP_DEBUG ]; then
 fi
 
 if [ ! -z $PHP_DEBUG ]; then
-    export xdebug_idekey=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13)
-    echo "xdebug.idekey==${xdebug_idekey}"
     { \
       echo 'xdebug.remote_log="/var/log/xdebug/xdebug.log"' ; \
       echo 'xdebug.remote_enable=on' ; \
-      echo 'xdebug.remote_autostart=off' ; \
+      echo 'xdebug.remote_autostart=on' ; \
       echo 'xdebug.remote_host=127.0.0.1' ; \
       echo 'xdebug.remote_port=9000' ; \
-      echo "xdebug.idekey=${xdebug_idekey}" ; \
+      echo 'xdebug.idekey=XDEBUG_ECLIPSE' ; \
     } >> /etc/php/${PHP_VERSION}/mods-available/xdebug.ini
 fi
 

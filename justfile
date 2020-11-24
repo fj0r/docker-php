@@ -11,11 +11,9 @@ t profile="1":
         -e PHP_DEBUG={{profile}} \
         -e WS_FIXED=1 \
         -e PHP_FPM_SERVERS=5,25 \
-        -e CONF_PHP_SESSION__AUTO_START=119 \
         -v vscode-server-php:/root/.vscode-server \
         -v $(pwd)/id_ed25519.pub:/etc/authorized_keys/root \
         -v $(pwd)/index.php:/app/index.php \
-        -v $(pwd)/log:/var/log/xdebug \
         -v $PWD/index.php:/srv/index.php \
         nnurphy/phpf:7.2
 
