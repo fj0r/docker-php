@@ -2,7 +2,7 @@ FROM nnurphy/or:deb
 
 ARG php_version=7.2
 ENV PHP_VERSION=${php_version}
-ENV PHP_PGKS \
+ENV PHP_PKGS \
         php${PHP_VERSION} \
         php${PHP_VERSION}-opcache \
         php${PHP_VERSION}-fpm \
@@ -24,7 +24,7 @@ RUN set -eux \
   ; echo "deb https://packages.sury.org/php/ buster main"  \
         | tee /etc/apt/sources.list.d/php.list \
   ; apt-get update \
-  ; apt-get install -y --no-install-recommends $PHP_PGKS \
+  ; apt-get install -y --no-install-recommends $PHP_PKGS \
   ; apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 RUN set -eux \

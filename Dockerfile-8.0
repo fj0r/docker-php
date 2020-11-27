@@ -1,8 +1,8 @@
 FROM nnurphy/or
 
-ARG php_version=7.4
+ARG php_version=8.0
 ENV PHP_VERSION=${php_version}
-ENV PHP_PGKS \
+ENV PHP_PKGS \
         php${PHP_VERSION} \
         php${PHP_VERSION}-opcache \
         php${PHP_VERSION}-fpm \
@@ -21,7 +21,9 @@ ENV PHP_PGKS \
 
 RUN set -eux \
   ; apt-get update \
-  ; apt-get install -y --no-install-recommends $PHP_PGKS \
+  ; sudo apt-get install -y --no-install-recommends software-properties-common \
+  ; sudo add-apt-repository -y ppa:ondrej/php \
+  ; apt-get install -y --no-install-recommends $PHP_PKGS \
   ; apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 RUN set -eux \
