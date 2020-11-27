@@ -15,7 +15,7 @@ t profile="1":
         -v $(pwd)/id_ed25519.pub:/etc/authorized_keys/root \
         -v $(pwd)/index.php:/app/index.php \
         -v $PWD/index.php:/srv/index.php \
-        nnurphy/phpf:7.2
+        nnurphy/phpf:8.0
 
 build-gcc:
     docker build . -t nnurphy/phpf:7.2 -f Dockerfile-gcc \
