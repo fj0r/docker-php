@@ -27,27 +27,11 @@ fi
 
 if [ ! -z $PHP_DEBUG ]; then
     { \
-      echo 'xdebug.remote_log="/var/log/xdebug/xdebug.log"' ; \
-      echo 'xdebug.remote_enable=on' ; \
-      echo 'xdebug.remote_autostart=on' ; \
-      echo 'xdebug.remote_host=127.0.0.1' ; \
-      echo 'xdebug.remote_port=9000' ; \
-      echo 'xdebug.idekey=XDEBUG_ECLIPSE' ; \
-    } >> /etc/php/${PHP_VERSION}/mods-available/xdebug.ini
-fi
-
-if [ "$PHP_PROFILE" = "1" ]; then
-    { \
-      echo '; profiler'; \
-      echo 'xdebug.profiler_enable = 0' ; \
-      echo 'xdebug.profiler_enable_trigger = 1' ; \
-      echo 'xdebug.profiler_output_dir = /var/log/xdebug' ; \
-    } >> /etc/php/${PHP_VERSION}/mods-available/xdebug.ini
-elif [ "$PHP_PROFILE" = "2" ]; then
-    { \
-      echo '; profiler'; \
-      echo 'xdebug.profiler_enable = 1' ; \
-      echo 'xdebug.profiler_output_dir = /var/log/xdebug' ; \
+      echo 'xdebug.log="/var/log/xdebug/xdebug.log"' ; \
+      echo 'xdebug.mode=debug' ; \
+      echo 'xdebug.start_with_request=yes' ; \
+      echo 'xdebug.client_host=127.0.0.1' ; \
+      echo 'xdebug.client_port=9000' ; \
     } >> /etc/php/${PHP_VERSION}/mods-available/xdebug.ini
 fi
 

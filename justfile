@@ -11,11 +11,13 @@ t profile="1":
         -e PHP_DEBUG={{profile}} \
         -e WS_FIXED=1 \
         -e PHP_FPM_SERVERS=5,25 \
+        -e XDEBUG_SESSION=xdebug_suck \
+        -v $(pwd)/setup-php:/setup-php \
         -v vscode-server-php:/root/.vscode-server \
         -v $(pwd)/id_ed25519.pub:/etc/authorized_keys/root \
         -v $(pwd)/index.php:/app/index.php \
         -v $PWD/index.php:/srv/index.php \
-        nnurphy/phpf:8.0
+        nnurphy/phpf:7.2
 
 build-gcc:
     docker build . -t nnurphy/phpf:7.2 -f Dockerfile-gcc \
