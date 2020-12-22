@@ -49,6 +49,12 @@ COPY docker-nginx-default /etc/openresty/conf.d/default.conf
 COPY setup-php /setup-php
 COPY services.d/php-fpm /etc/services.d/php-fpm
 
+RUN set -ex \
+  ; nvim -u /root/.config/nvim/init.vim --headless \
+        +'LspInstall intelephense' \
+        +qa \
+  ; npm cache clean -f
+
 ENV PHP_DEBUG=
 ENV PHP_PROFILE=
 ENV PHP_FPM_SERVERS=
