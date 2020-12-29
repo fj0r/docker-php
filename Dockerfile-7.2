@@ -52,9 +52,11 @@ COPY setup-php /setup-php
 COPY services.d/php-fpm /etc/services.d/php-fpm
 
 RUN set -ex \
+  ; curl -sSL https://getcomposer.org/installer \
+    | php -- --install-dir=/usr/local/bin --filename=composer \
+  #; npm config set registry https://registry.npm.taobao.org \
   ; nvim -u /root/.config/nvim/init.vim --headless \
-        +'LspInstall intelephense' \
-        +qa \
+		+'CocInstall -sync coc-phpls' +qa \
   ; npm cache clean -f
 
 ENV PHP_DEBUG=

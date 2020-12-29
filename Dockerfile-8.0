@@ -52,21 +52,11 @@ COPY services.d/php-fpm /etc/services.d/php-fpm
 RUN set -ex \
   ; curl -sSL https://getcomposer.org/installer \
     | php -- --install-dir=/usr/local/bin --filename=composer \
-  ; curl -sSL https://github.com/phpactor/phpactor/archive/0.16.2.tar.gz \
-    | tar -zxf - -C phpactor --strip-components=1 \
-  ; cd phpactor \
-  ; composer update --no-plugins --prefer-dist \
-  ; composer install \
-  ; ln -sf bin/phpactor /usr/local/bin/phpactor \
-  ; phpactor extension:install phpactor/behat-extension \
-  ; phpactor extension:install phpactor/language-server-phpstan-extension \
-  ; phpactor extension:install phpactor/phpspec-extension \
-  ; phpactor extension:install phpactor/phpunit-extension \
-  ; composer clearcache \
+  #; npm config set registry https://registry.npm.taobao.org \
   ; nvim -u /root/.config/nvim/init.vim --headless \
-		+'CocInstall -sync coc-phpactor' +qa \
+		+'CocInstall -sync coc-phpls' +qa \
   ; npm cache clean -f
- 
+
 ENV PHP_DEBUG=
 ENV PHP_PROFILE=
 ENV PHP_FPM_SERVERS=
