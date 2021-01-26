@@ -59,7 +59,7 @@ RUN set -ex \
   ; nvim -u $nvim_home/init.vim --headless \
 		+'CocInstall -sync coc-phpls' +qa \
   ; $nvim_home/plugged/vimspector/install_gadget.py --force-enable-php \
-  ; rm -f $nvim_home/plugged/vimspector/gadgets/linux/download/vscode-php-debug/*/*.vsix \
+  ; rm -f $nvim_home/plugged/vimspector/gadgets/linux/download/*/*/*.vsix \
   ; npm cache clean -f
 
 ENV PHP_DEBUG=
