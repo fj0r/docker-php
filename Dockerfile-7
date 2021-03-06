@@ -1,6 +1,6 @@
-FROM nnurphy/or:deb
+FROM nnurphy/or
 
-ARG php_version=7.2
+ARG php_version=7.4
 ENV PHP_VERSION=${php_version}
 ENV PHP_PKGS \
         php${PHP_VERSION} \
