@@ -1,4 +1,4 @@
-FROM nashv1/or
+FROM fj0rd/or
 
 ARG php_version=8.0
 ENV PHP_VERSION=${php_version}
