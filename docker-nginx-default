@@ -1,8 +1,11 @@
 server {
     set $root       '/srv';
-    server_name     _;
     listen          80;
+#   listen          443 ssl;
+    server_name     _;
     charset         utf-8;
+
+    #include       auto-ssl.location;
 
     root            $root;
     #access_log     /var/log/nginx/host.access.log  main;
@@ -33,10 +36,16 @@ server {
         access_log off;
     }
 
-    location = /hello.lua {
+    location = /info.json {
         content_by_lua_block{
+            local cjson = require "cjson"
+            local res = {
+                hostname = os.getenv("HOSTNAME"),
+                timezone = os.getenv("TIMEZONE"),
+                version = 1
+            }
             ngx.header.content_type = 'application/json'
-            ngx.say('{"code":1,"msg":"success"}')
+            ngx.say(cjson.encode(res))
             ngx.exit(200)
         }
     }
@@ -57,9 +66,33 @@ server {
     #    deny  all;
     #}
 
+    location = /tunnel {
+        include     http_params;
+        include     websocket_params;
+        proxy_pass  http://127.0.0.1:8001;
+    }
+
+    location /in/ {
+        include     http_params;
+        proxy_pass http://127.0.0.1:8000/;
+    }
+
+    location = /~!frp {
+        include     http_params;
+        include     websocket_params;
+        proxy_pass          http://127.0.0.1:7000;
+    }
+
+    location ~* /([0-9]+)/(.*) {
+        include     http_params;
+        proxy_pass http://127.0.0.1:$1/$2;
+    }
+
+
     location = /websocat {
         include     http_params;
         include     websocket_params;
         proxy_pass  http://127.0.0.1:9999;
     }
 }
+
