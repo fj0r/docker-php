@@ -55,7 +55,7 @@ RUN set -ex \
   ; curl -sSL https://getcomposer.org/installer \
     | php -- --install-dir=/usr/local/bin --filename=composer \
   #; npm config set registry https://registry.npm.taobao.org \
-  ; nvim_home=/root/.config/nvim \
+  ; nvim_home=/etc/skel/.config/nvim \
   ; nvim -u $nvim_home/init.vim --headless \
 		+'CocInstall -sync coc-phpls' +qa \
   ; $nvim_home/plugged/vimspector/install_gadget.py --force-enable-php \
