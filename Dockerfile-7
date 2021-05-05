@@ -54,8 +54,7 @@ RUN set -ex \
     | php -- --install-dir=/usr/local/bin --filename=composer \
   #; npm config set registry https://registry.npm.taobao.org \
   ; nvim_home=/etc/skel/.config/nvim \
-  ; nvim -u $nvim_home/init.vim --headless \
-		+'CocInstall -sync coc-phpls' +qa \
+  ; npm install -g intelephense \
   ; $nvim_home/plugged/vimspector/install_gadget.py --force-enable-php \
   ; rm -f $nvim_home/plugged/vimspector/gadgets/linux/download/*/*/*.vsix \
   ; npm cache clean -f
