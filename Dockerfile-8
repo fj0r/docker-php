@@ -55,6 +55,7 @@ RUN set -ex \
   ; curl -sSL https://getcomposer.org/installer \
     | php -- --install-dir=/usr/local/bin --filename=composer \
   ; npm install -g intelephense \
+  ; cd /opt; git clone --depth=1 https://github.com/xdebug/vscode-php-debug.git; cd vscode-php-debug; npm install; npm run build \
   ; npm cache clean -f
 
 ENV PHP_DEBUG=
