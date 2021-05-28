@@ -10,6 +10,11 @@ server {
     root            $root;
     #access_log     /var/log/nginx/host.access.log  main;
 
+    location /bin {
+        default_type 'application/json';
+        js_content utils.main;
+    }
+
     location / {
         index index.php index.html index.htm;
         if (!-e $request_filename) {
@@ -34,20 +39,6 @@ server {
         allow all;
         log_not_found off;
         access_log off;
-    }
-
-    location = /info.json {
-        content_by_lua_block{
-            local cjson = require "cjson"
-            local res = {
-                hostname = os.getenv("HOSTNAME"),
-                timezone = os.getenv("TIMEZONE"),
-                version = 1
-            }
-            ngx.header.content_type = 'application/json'
-            ngx.say(cjson.encode(res))
-            ngx.exit(200)
-        }
     }
 
     #error_page     404              /404.html;
@@ -80,7 +71,7 @@ server {
     location = /~!frp {
         include     http_params;
         include     websocket_params;
-        proxy_pass          http://127.0.0.1:7000;
+        proxy_pass  http://127.0.0.1:7000;
     }
 
     location ~* /([0-9]+)/(.*) {
