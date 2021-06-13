@@ -20,7 +20,7 @@ ENV PHP_PKGS \
         php${PHP_VERSION}-xdebug
 
 RUN set -eux \
-  ; curl -sL https://deb.nodesource.com/setup_15.x | bash - \
+  ; curl -sL https://deb.nodesource.com/setup_16.x | bash - \
   ; apt-get install -y --no-install-recommends nodejs \
   ; curl -sL https://packages.sury.org/php/apt.gpg | apt-key add - \
   ; echo "deb https://packages.sury.org/php/ bullseye main"  \
