@@ -24,7 +24,7 @@ ENV PHP_PKGS \
 RUN set -eux \
   ; apt-get update \
   ; curl -sL https://deb.nodesource.com/setup_16.x | bash - \
-  ; apt-get install -y --no-install-recommends nodejs \
+  ; apt-get install -y --no-install-recommends nodejs cron \
   ; apt-get install -y --no-install-recommends $PHP_PKGS \
   ; apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
