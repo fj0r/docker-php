@@ -1,5 +1,4 @@
-ARG REPO=fj0rd
-FROM ${REPO}/or
+FROM fj0rd/or
 
 ARG php_version=8.0
 ENV PHP_VERSION=${php_version}
